@@ -1,12 +1,16 @@
-import './App.css'
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import ItemDetails from './pages/ItemDetails';
+import './App.css';
 
 function App() {
   return (
-    <>
-      <h1>Olá, mundo</h1>
-      <h1>Seja bem vindo(a) ao Feira Solidária!</h1>
-    </>
-  )
+    <Router>
+      <Routes>
+        <Route path="/" element={<ItemDetails />} />
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;
