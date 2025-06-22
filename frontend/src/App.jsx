@@ -1,7 +1,7 @@
 import { Link, BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
 import CadastroItem from './pages/CadastroItem';
-import Perfil from './pages/Perfil';
+import Perfil from './pages/PaginaPerfil';
 import './App.css';
 
 function App() {
