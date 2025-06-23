@@ -8,7 +8,7 @@ function Perfil({ meusItens }) {
       {meusItens.length === 0 ? (
         <div className="text-center text-muted">
           <p>Você ainda não cadastrou nenhum item.</p>
-          <Link to="/cadastro" className="btn btn-outline-primary mt-3">
+          <Link to="/cadastroItem" className="btn btn-outline-primary mt-3">
             Cadastrar meu primeiro item
           </Link>
         </div>
