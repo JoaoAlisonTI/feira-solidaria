@@ -11,7 +11,7 @@
 - Tela Cadastro Usuário (Gabriel Lima)
 
 ### Protótipo no figma:
-[Link do figma]("https://www.figma.com/design/D3EojY9KRJcHSwFCZTdzNb/Sem-t%C3%ADtulo?node-id=0-1&p=f")
+[Link do figma](https://www.figma.com/design/D3EojY9KRJcHSwFCZTdzNb/Sem-t%C3%ADtulo?node-id=0-1&p=f)
 
 ### Detalhe das rotas:
 - Tela Home:  ```/```
