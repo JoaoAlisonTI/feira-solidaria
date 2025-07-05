@@ -6,6 +6,7 @@ import RegisterPage from './pages/RegisterPage.jsx';
 import CadastroItem from './pages/CadastroItem';
 import Perfil from './pages/PaginaPerfil';
 import './App.css'; 
+import Home from './pages/Home/Home.jsx';
 
 function App() {
   const [itens, setItens] = useState([]);
@@ -20,15 +21,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/cadastro" element={<RegisterPage />} />
-          <Route 
-            path="/" 
-            element={
-              <div className="container text-center mt-5">
-                <h1>Bem-vindo ao Solidário</h1>
-                <p>Sua plataforma de doações.</p>
-              </div>
-            } 
-          />
+          <Route path="/" element={<Home />} />
           <Route 
             path="/cadastroItem" 
             element={

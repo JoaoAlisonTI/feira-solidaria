@@ -1,6 +1,6 @@
 /* Cores do protótipo "Solidário" */
 :root {
-  --cor-primaria: #8cd279;
+  --cor-primaria: #4FD12B;
   --cor-texto-principal: #131612;
   --cor-texto-secundario: #6f816a;
   --cor-fundo-claro: #f2f4f1;
@@ -28,7 +28,7 @@ body {
 }
 
 .btn-custom-green:hover {
-  background-color: #79b469; /* Um pouco mais escuro no hover */
+  background-color: #4bc429; /* Um pouco mais escuro no hover */
   color: var(--cor-texto-principal);
 }
 

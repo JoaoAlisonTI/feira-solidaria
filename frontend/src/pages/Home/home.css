@@ -1,0 +1,21 @@
+.main {
+    padding-top: 36px;
+}
+
+.hero-section {
+    border-radius: 12px;
+    height: 680px;
+}
+
+.hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 160px;
+}
+
+.titulo-hero {
+    font-size: 60px;
+    margin-top: 173px;
+    line-height: 60px;
+}
