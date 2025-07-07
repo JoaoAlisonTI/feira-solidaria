@@ -1,0 +1,25 @@
+.div-input {
+    background-color: white;
+    
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+    padding-left: 16px;
+}
+
+.icon-lupa {
+    width: 20px;
+}
+
+.input-search {
+    border: none;
+    font-size: 16px;
+    max-width: 318px;
+}
+
+.btn-search {
+    padding: 12px 24px;
+    border-radius: 24px;
+}
