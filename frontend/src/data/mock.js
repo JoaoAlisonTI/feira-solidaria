@@ -1,30 +1,33 @@
 // mock.js
 export const usuarioMock = {
-  nome: "Lucas Lima",
+  nome: "Pedro Páscoa",
   desde: "2022",
-  avatar: "/images/avatar.png",
+  cidade: "Fortaleza - CE",
+  avatar: "/public/pedro.jpg",
+  totalDoacoes: 14,
+  familiasAjudadas: 8
 };
 
 export const produtosMock = [
   {
     nome: "Camisetas",
-    descricao: "Tamanho M, todas em bom estado",
-    imagem: "/images/roupa.png",
+    descricao: "Tamanho M em ótimo estado. São confortáveis, ideais para o dia a dia, e podem fazer a diferença pra alguém que precisa.",
+    imagem: "/public/camisetas.jpg",
   },
   {
-    nome: "Cesta básica",
-    descricao: "Arroz, feijão, macarrão e óleo",
-    imagem: "/images/brinquedos.png",
+    nome: "Mochila Usada",
+    descricao: "Em couro, poucas marcas de uso. Tem espaço interno generoso e é ótima para trabalho ou estudos.",
+    imagem: "/public/mochila.jpeg",
   },
   {
     nome: "Carrinho de bebê",
-    descricao: "Pouco usado",
-    imagem: "/images/carrinho.png",
+    descricao: "Carrinho em bom estado, funcional e limpo.",
+    imagem: "/public/carrinhobebe.jpg",
   },
   {
     nome: "Coleção de Livros",
-    descricao: "Livros",
-    imagem: "/images/livros.png",
+    descricao: "Estão usados, mas bem conservados.",
+    imagem: "/public/livros.jpeg",
   },
   
 ];
