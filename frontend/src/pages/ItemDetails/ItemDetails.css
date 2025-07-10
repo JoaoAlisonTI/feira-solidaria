@@ -1,0 +1,38 @@
+.app {
+  padding: 20px;
+}
+
+.breadcrumb {
+  color: grey;
+  margin: 20px 0;
+}
+
+.main-image img {
+  width: 100%;
+  max-width: 800px;
+  border-radius: 8px;
+}
+
+h1 {
+  font-size: 24px;
+  margin: 20px 0 10px;
+}
+
+.description {
+  color: #555;
+}
+
+.details {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px 0;
+}
+
+.contact-button {
+  padding: 10px 20px;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
