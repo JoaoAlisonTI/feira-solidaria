@@ -19,3 +19,32 @@
     margin-top: 173px;
     line-height: 60px;
 }
+
+.list-itens-section {
+    margin-top: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.select-div {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.select {
+    border: none;
+    outline: none;
+    border-radius: 16px;
+    background-color: #F2F5F2;
+    height: 32px;
+    width: auto;
+    text-align: center;
+    cursor: pointer;
+}
+.select:focus {
+    border: 2px solid black;
+}
