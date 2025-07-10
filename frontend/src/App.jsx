@@ -4,6 +4,7 @@ import Header from './components/Header.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
 import CadastroItem from './pages/CadastroItem';
+import ItemDetails from './pages/ItemDetails';
 import Perfil from './pages/PaginaPerfil';
 import './App.css'; 
 import Home from './pages/Home/Home.jsx';
@@ -11,7 +12,6 @@ import Home from './pages/Home/Home.jsx';
 function App() {
   const [itens, setItens] = useState([]);
   const [mensagemAlerta, setMensagemAlerta] = useState('');
-
   const adicionarItem = (item) => setItens([...itens, item]);
 
   return (
@@ -32,6 +32,7 @@ function App() {
             } 
           />
           <Route path="/perfil" element={<Perfil meusItens={itens} />} />
+          <Route path="/" element={<ItemDetails />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
     
