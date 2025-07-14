@@ -6,21 +6,16 @@ function LoginPage() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = async (event) => {
-    event.preventDefault();
-    try {
-      const response = await fetch(`http://localhost:3001/users?email=${email}&password=${password}`);
-      const users = await response.json();
-      if (users.length > 0) {
-        alert('Login bem-sucedido!');
-        navigate('/');
-      } else {
-        alert('Email ou senha inválidos.');
-      }
-    } catch (error) {
-      alert('Ocorreu um erro no servidor.');
-    }
-  };
+const handleLogin = (event) => {
+  event.preventDefault();
+  // Simulação de login: aceita qualquer email e senha
+  if (email && password) {
+    alert('Login bem-sucedido! (Simulação)');
+    navigate('/');
+  } else {
+    alert('Email ou senha inválidos.');
+  }
+};
 
   return (
     <div className="container d-flex justify-content-center py-5">

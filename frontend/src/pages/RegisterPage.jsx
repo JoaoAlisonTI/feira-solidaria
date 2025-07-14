@@ -8,27 +8,17 @@ function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleRegister = async (event) => {
-    event.preventDefault();
+const handleRegister = (event) => {
+  event.preventDefault();
 
-    if (password !== confirmPassword) {
-      alert('As senhas não coincidem!');
-      return;
-    }
+  if (password !== confirmPassword) {
+    alert('As senhas não coincidem!');
+    return;
+  }
 
-    const newUser = { name, email, password };
-    try {
-      await fetch('http://localhost:3001/users', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newUser),
-      });
-      alert('Conta criada com sucesso!');
-      navigate('/login');
-    } catch (error) {
-      alert('Ocorreu um erro no servidor ao tentar criar a conta.');
-    }
-  };
+  alert('Conta criada com sucesso! (Simulação)');
+  navigate('/login');
+};
 
   return (
     <div className="container d-flex justify-content-center py-5">
