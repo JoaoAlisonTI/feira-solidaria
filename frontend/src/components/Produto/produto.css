@@ -1,0 +1,47 @@
+.div-produto-conatiner {
+    margin-bottom: 20px;
+    width: 100%;
+    background-color: blue;
+    display: flex;
+    align-items: center;
+}
+
+.div-produto-detalhes {
+    background-color: green;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.div-produto-detalhes > h3 {
+    font-size: 20px;
+    font-weight: bold;
+}
+.div-produto-detalhes > p {
+    font-size: 16px;
+    color: #6E8566;
+}
+.div-spans {
+    display: flex;
+    gap: 8px;
+}
+.div-spans span {
+    background-color: var(--cor-primaria);
+    width: auto;
+    padding: 4px 8px;
+    border-radius: 16px;
+    text-align: center;
+    font-size: 14px;
+}
+.div-button > button {
+    margin-top: 16px;
+    border: none;
+    outline: none;
+    border-radius: 16px;
+    background-color: #F2F5F2;
+    padding: 5px 8px;
+    width: auto;
+    text-align: center;
+    cursor: pointer;
+    font-size: 16px;
+}

@@ -1,5 +1,7 @@
 import heroImage from "../../assets/hero-section-image.svg"
 import Input from "../../components/Input/Input"
+import Produto from "../../components/Produto/Produto"
+
 import "./home.css"
 
 function Home() {
@@ -59,8 +61,10 @@ function Home() {
                         </select>
                     </div>
 
-                    <div className="itens-div">
-                    {/*Itens mapeados aqui*/}
+                    <div className="produtos-div">
+                        <Produto />
+                        <Produto />
+                        <Produto />
                     </div>    
                 </section>    
             </main>
