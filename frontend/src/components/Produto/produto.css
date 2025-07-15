@@ -1,15 +1,16 @@
 .div-produto-conatiner {
     margin-bottom: 20px;
     width: 100%;
-    background-color: blue;
     display: flex;
     align-items: center;
+    flex-wrap: wrap-reverse;
+    gap: 12px;
 }
 
 .div-produto-detalhes {
-    background-color: green;
     display: flex;
     flex-direction: column;
+    height: auto;
     flex: 1;
 }
 
@@ -44,4 +45,10 @@
     text-align: center;
     cursor: pointer;
     font-size: 16px;
+}
+
+.div-produto-img img {
+    height: 171px;
+    width: 320px;
+    border-radius: 12px;
 }
