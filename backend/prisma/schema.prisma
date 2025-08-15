@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum StatusDoacao {
+  DISPONIVEL
+  RESERVADA
+  ENTREGUE
+  CANCELADA
+}
+
+model Usuario {
+  id         Int       @id @default(autoincrement())
+  nome       String
+  email      String    @unique
+  senhaHash  String
+  telefone   String?
+  doacoesFeitas    Doacao[] @relation("DoacoesFeitas")
+  doacoesRecebidas Doacao[] @relation("DoacoesRecebidas")
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
+model Categoria {
+  id       Int      @id @default(autoincrement())
+  nome     String
+  doacoes  Doacao[]
+}
+
+model Doacao {
+  id             Int          @id @default(autoincrement())
+  nomeItem       String
+  descricao      String
+  imagemUrl      String?
+  cidade         String?
+  estado         String?
+  enderecoColeta String?
+  quantidade     Int          @default(1)
+  status         StatusDoacao @default(DISPONIVEL)
+
+  // quem doou
+  doador     Usuario  @relation("DoacoesFeitas", fields: [doadorId], references: [id])
+  doadorId   Int
+
+  // quem recebeu
+  receptor   Usuario? @relation("DoacoesRecebidas", fields: [receptorId], references: [id])
+  receptorId Int?
+
+  categoria  Categoria @relation(fields: [categoriaId], references: [id])
+  categoriaId Int
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
