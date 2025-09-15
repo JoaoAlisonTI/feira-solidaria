@@ -22,7 +22,7 @@ const createDoacao = async (req, res) => {
 
     res.status(201).json(novaDoacao);
   } catch (error) {
-    console.error(error);
+    console.error("❌ Erro em createDoacao:", error);
     res.status(500).json({ error: "Erro ao criar doação." });
   }
 };
@@ -32,6 +32,7 @@ const getDoacoes = async (req, res) => {
     const doacoes = await doacaoModel.getAllDoacoes();
     res.json(doacoes);
   } catch (error) {
+    console.error("❌ Erro em getDoacoes:", error);
     res.status(500).json({ error: "Erro ao buscar doações." });
   }
 };
@@ -47,6 +48,7 @@ const getDoacaoById = async (req, res) => {
 
     res.json(doacao);
   } catch (error) {
+    console.error("❌ Erro em getDoacaoById:", error);
     res.status(500).json({ error: "Erro ao buscar doação." });
   }
 };
@@ -71,7 +73,26 @@ const updateDoacao = async (req, res) => {
 
     res.json(doacaoAtualizada);
   } catch (error) {
+    console.error("❌ Erro em updateDoacao:", error);
     res.status(500).json({ error: "Erro ao atualizar doação." });
+  }
+};
+
+// ✅ Nova função para concluir doação
+const concluirDoacao = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { receptorId } = req.body;
+
+    const doacaoConcluida = await doacaoModel.updateDoacao(Number(id), {
+      status: "ENTREGUE",
+      receptorId
+    });
+
+    res.json(doacaoConcluida);
+  } catch (error) {
+    console.error("❌ Erro em concluirDoacao:", error);
+    res.status(500).json({ error: "Erro ao concluir doação." });
   }
 };
 
@@ -79,5 +100,6 @@ module.exports = {
   createDoacao,
   getDoacoes,
   getDoacaoById,
-  updateDoacao
+  updateDoacao,
+  concluirDoacao
 };
