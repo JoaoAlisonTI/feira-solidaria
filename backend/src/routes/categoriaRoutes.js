@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
+const authMiddleware = require("../middlewares/authMiddleware");  
+
 const {
   getAllCategoriasHandler,
   getCategoriaByIdHandler,
@@ -9,12 +11,13 @@ const {
   deleteCategoriaHandler
 } = require("../controllers/categoriaController");
 
+// Rotas públicas
 router.get("/", getAllCategoriasHandler);
 router.get("/:id_categoria", getCategoriaByIdHandler);
-router.post("/", addCategoriaHandler);
-router.put("/:id_categoria", updateCategoriaHandler);
-router.delete("/:id_categoria", deleteCategoriaHandler);
 
- 
+// Rotas protegidas
+router.post("/", authMiddleware, addCategoriaHandler);  
+router.put("/:id_categoria", authMiddleware, updateCategoriaHandler);
+router.delete("/:id_categoria", authMiddleware, deleteCategoriaHandler);
 
 module.exports = router;
