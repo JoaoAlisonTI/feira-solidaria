@@ -4,7 +4,7 @@ import Header from './components/Header.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
 import CadastroItem from './pages/CadastroItem.jsx';
-import ItemDetails from './pages/ItemDetails/ItemDetails.jsx';
+import ItemDetails from './pages/ItemDetails.jsx';
 import Perfil from './pages/PaginaPerfil/PaginaPerfil.jsx';
 import './App.css'; 
 import Home from './pages/Home/Home.jsx';
@@ -32,7 +32,7 @@ function App() {
             } 
           />
           <Route path="/perfil" element={<Perfil meusItens={itens} />} />
-          <Route path="/itemDetails" element={<ItemDetails />} />
+          <Route path="/itemDetails/:id" element={<ItemDetails />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
     
