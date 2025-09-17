@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import api from '../services/api';
 
 function RegisterPage() {
   const [name, setName] = useState('');
@@ -8,7 +9,7 @@ function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
 
-const handleRegister = (event) => {
+const handleRegister = async (event) => {
   event.preventDefault();
 
   if (password !== confirmPassword) {
@@ -16,8 +17,22 @@ const handleRegister = (event) => {
     return;
   }
 
-  alert('Conta criada com sucesso! (Simulação)');
-  navigate('/login');
+  try {
+    const response = await api.post('/usuarios', {
+      nome: name,
+      email,
+      senha: password
+    });
+
+    if (response.status === 201) {
+      alert('Conta criada com sucesso!');
+      navigate('/login');
+    } else {
+      alert(response.data.error || 'Erro ao criar conta.');
+    }
+  } catch (error) {
+    alert(error.response?.data?.error || 'Erro de conexão com o servidor.');
+  }
 };
 
   return (

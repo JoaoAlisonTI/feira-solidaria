@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 function Header() {
   const navigate = useNavigate();
+  const isLoggedIn = !!localStorage.getItem('token');
 
   return (
     <header className="d-flex align-items-center justify-content-between px-5 py-3 border-custom-bottom">
@@ -23,12 +24,21 @@ function Header() {
           <Link className="text-custom-dark text-decoration-none" to="/como-funciona">Como Funciona</Link>
           <Link className="text-custom-dark text-decoration-none" to="/contato">Contato</Link>
         </nav>
+        {isLoggedIn ? (
+          <button
+            onClick={() => navigate('/perfil')}
+            className="btn btn-custom-green rounded-custom px-4"
+          >
+            Perfil
+          </button>
+        ) : (
         <button
           onClick={() => navigate('/login')}
           className="btn btn-custom-green rounded-custom px-4"
         >
           Entrar
         </button>
+        )}
       </div>
     </header>
   );
