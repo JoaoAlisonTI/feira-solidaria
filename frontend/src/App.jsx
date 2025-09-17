@@ -32,7 +32,7 @@ function App() {
             } 
           />
           <Route path="/perfil" element={<Perfil meusItens={itens} />} />
-          <Route path="/itemDetails" element={<ItemDetails />} />
+          <Route path="/itemDetails/:id" element={<ItemDetails />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
     
