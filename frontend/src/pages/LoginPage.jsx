@@ -7,23 +7,23 @@ function LoginPage() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-const handleLogin = async (event) => {
-  event.preventDefault();
+  const handleLogin = async (event) => {
+    event.preventDefault();
 
-  try {
-    const response = await api.post('/usuarios/login', {
-      email,
-      senha: password
-    });
+    try {
+      const response = await api.post('/usuarios/login', {
+        email,
+        senha: password
+      });
 
-    localStorage.setItem('token', response.data.token);
+      localStorage.setItem('token', response.data.token);
 
-    alert('Login bem-sucedido!');
-    navigate('/');
-  } catch (error) {
-    alert(error.response?.data?.error || 'Email ou senha inválidos.');
-  }
-};
+      alert('Login bem-sucedido!');
+      navigate('/');
+    } catch (error) {
+      alert(error.response?.data?.error || 'Email ou senha inválidos.');
+    }
+  };
 
   return (
     <div className="container d-flex justify-content-center py-5">
