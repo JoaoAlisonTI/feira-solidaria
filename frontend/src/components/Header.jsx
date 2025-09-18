@@ -16,11 +16,11 @@ function Header() {
         </div>
         <h2 className="h5 fw-bold m-0">Feira Solidária</h2>
       </Link>
-      
+
       <div className="d-flex align-items-center gap-4">
         <nav className="d-none d-md-flex align-items-center gap-4">
           <Link className="text-custom-dark text-decoration-none" to="/">Início</Link>
-          <Link className="text-custom-dark text-decoration-none" to="/doacoes">Doações</Link>
+          <Link className="text-custom-dark text-decoration-none" to="/cadastroItem">Cadastrar item</Link>
           <Link className="text-custom-dark text-decoration-none" to="/como-funciona">Como Funciona</Link>
           <Link className="text-custom-dark text-decoration-none" to="/contato">Contato</Link>
         </nav>
@@ -32,12 +32,12 @@ function Header() {
             Perfil
           </button>
         ) : (
-        <button
-          onClick={() => navigate('/login')}
-          className="btn btn-custom-green rounded-custom px-4"
-        >
-          Entrar
-        </button>
+          <button
+            onClick={() => navigate('/login')}
+            className="btn btn-custom-green rounded-custom px-4"
+          >
+            Entrar
+          </button>
         )}
       </div>
     </header>
