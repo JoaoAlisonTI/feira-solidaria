@@ -48,6 +48,7 @@ function Home() {
                         {produtos.map((item) => (
                             <Produto  
                                 key={item.id}
+                                id={item.id}
                                 nomeProduto={item.nome}
                                 descricaoProduto={item.descricao}
                                 localizacaoProduto={item.localizacao}
