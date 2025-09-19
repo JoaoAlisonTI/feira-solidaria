@@ -1,21 +1,20 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const prisma = require('../prisma');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const createUser = async (req, res) => {
-  try{
-    const { nome, email, senha, telefone} = req.body;
+  try {
+    const { nome, email, senha, telefone } = req.body;
 
-    if(!nome || !email || !senha){
+    if (!nome || !email || !senha) {
       return res.status(400).json({ error: 'Nome, email e senha são obrigatórios.' });
     }
 
     const emailExists = await prisma.usuario.findUnique({
-      where: { email : email }
+      where: { email: email }
     });
 
-    if(emailExists){
+    if (emailExists) {
       return res.status(400).json({ error: 'Email já está em uso.' });
     }
 
@@ -37,7 +36,7 @@ const createUser = async (req, res) => {
       email: newUser.email
     });
   }
-  catch(error){
+  catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Erro ao criar usuário.' });
   }

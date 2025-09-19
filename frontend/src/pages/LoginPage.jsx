@@ -1,21 +1,29 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import api from '../services/api';
 
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-const handleLogin = (event) => {
-  event.preventDefault();
-  // Simulação de login: aceita qualquer email e senha
-  if (email && password) {
-    alert('Login bem-sucedido! (Simulação)');
-    navigate('/');
-  } else {
-    alert('Email ou senha inválidos.');
-  }
-};
+  const handleLogin = async (event) => {
+    event.preventDefault();
+
+    try {
+      const response = await api.post('/usuarios/login', {
+        email,
+        senha: password
+      });
+
+      localStorage.setItem('token', response.data.token);
+
+      alert('Login bem-sucedido!');
+      navigate('/');
+    } catch (error) {
+      alert(error.response?.data?.error || 'Email ou senha inválidos.');
+    }
+  };
 
   return (
     <div className="container d-flex justify-content-center py-5">

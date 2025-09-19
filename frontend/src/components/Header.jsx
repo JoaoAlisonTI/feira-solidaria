@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 function Header() {
   const navigate = useNavigate();
+  const isLoggedIn = !!localStorage.getItem('token');
 
   return (
     <header className="d-flex align-items-center justify-content-between px-5 py-3 border-custom-bottom">
@@ -15,20 +16,29 @@ function Header() {
         </div>
         <h2 className="h5 fw-bold m-0">Feira Solidária</h2>
       </Link>
-      
+
       <div className="d-flex align-items-center gap-4">
         <nav className="d-none d-md-flex align-items-center gap-4">
           <Link className="text-custom-dark text-decoration-none" to="/">Início</Link>
-          <Link className="text-custom-dark text-decoration-none" to="/doacoes">Doações</Link>
+          <Link className="text-custom-dark text-decoration-none" to="/cadastroItem">Cadastrar item</Link>
           <Link className="text-custom-dark text-decoration-none" to="/como-funciona">Como Funciona</Link>
           <Link className="text-custom-dark text-decoration-none" to="/contato">Contato</Link>
         </nav>
-        <button
-          onClick={() => navigate('/login')}
-          className="btn btn-custom-green rounded-custom px-4"
-        >
-          Entrar
-        </button>
+        {isLoggedIn ? (
+          <button
+            onClick={() => navigate('/perfil')}
+            className="btn btn-custom-green rounded-custom px-4"
+          >
+            Perfil
+          </button>
+        ) : (
+          <button
+            onClick={() => navigate('/login')}
+            className="btn btn-custom-green rounded-custom px-4"
+          >
+            Entrar
+          </button>
+        )}
       </div>
     </header>
   );
