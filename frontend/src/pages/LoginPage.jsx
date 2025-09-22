@@ -1,6 +1,8 @@
+// src/pages/LoginPage.jsx
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import api from '../services/api';
+import { authenticatedFetch } from '../services/apiFetch'; // <- IMPORTAÇÃO NOVA
 
 function LoginPage() {
   const [email, setEmail] = useState('');
@@ -9,22 +11,22 @@ function LoginPage() {
 
   const handleLogin = async (event) => {
     event.preventDefault();
-
     try {
-      const response = await api.post('/usuarios/login', {
-        email,
-        senha: password
+      const data = await authenticatedFetch('/usuarios/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, senha: password }),
       });
 
-      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('token', data.token);
 
       alert('Login bem-sucedido!');
-      navigate('/');
+      navigate('/'); // Navega para a página inicial ou de perfil
     } catch (error) {
-      alert(error.response?.data?.error || 'Email ou senha inválidos.');
+      alert(error.message || 'Email ou senha inválidos.');
     }
   };
 
+  // ... o resto do seu código JSX continua igual ...
   return (
     <div className="container d-flex justify-content-center py-5">
       <div className="col-12 col-md-8 col-lg-6 col-xl-5">

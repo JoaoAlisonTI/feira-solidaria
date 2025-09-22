@@ -35,7 +35,7 @@ model Usuario {
 
 model Categoria {
   id       Int      @id @default(autoincrement())
-  nome     String
+  nome     String   @unique
   doacoes  Doacao[]
 }
 

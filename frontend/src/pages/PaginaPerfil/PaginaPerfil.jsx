@@ -1,19 +1,30 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./PaginaPerfil.css";
+// 1. IMPORTAR a nossa função fetch personalizada
+import { authenticatedFetch } from "../../services/apiFetch";
 
 export default function PaginaPerfil() {
   const [usuario, setUsuario] = useState(null);
   const [doacoesFeitas, setDoacoesFeitas] = useState([]);
   const [doacoesRecebidas, setDoacoesRecebidas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+  }
 
   useEffect(() => {
     async function carregarDados() {
       try {
+        // 2. USAR authenticatedFetch para buscar os dados iniciais
+        // A função já adiciona o token, a URL base e converte para .json()
         const [userRes, feitasRes, recebidasRes] = await Promise.all([
-          fetch("http://localhost:3001/api/usuarios/me").then(r => r.json()),
-          fetch("http://localhost:3001/api/usuarios/me/doacoes-feitas").then(r => r.json()),
-          fetch("http://localhost:3001/api/usuarios/me/doacoes-recebidas").then(r => r.json())
+          authenticatedFetch("/usuarios/me"),
+          authenticatedFetch("/usuarios/me/doacoes-feitas"),
+          authenticatedFetch("/usuarios/me/doacoes-recebidas")
         ]);
 
         setUsuario(userRes);
@@ -21,37 +32,49 @@ export default function PaginaPerfil() {
         setDoacoesRecebidas(recebidasRes);
       } catch (err) {
         console.error("Erro ao carregar perfil:", err);
+        // Se o token for inválido, o erro 401 será capturado aqui.
+        // Podemos redirecionar para o login.
+        if (err.message.includes("Token")) {
+           navigate("/login");
+        }
       } finally {
         setLoading(false);
       }
     }
     carregarDados();
-  }, []);
+  }, [navigate]); // Adicionado navigate ao array de dependências
 
   // Função para finalizar doação
   const finalizarDoacao = async (id) => {
     try {
-      const res = await fetch(`http://localhost:3001/api/doacoes/${id}/concluir`, {
+      // 3. USAR authenticatedFetch para a ação de finalizar
+      const updated = await authenticatedFetch(`/doacoes/${id}/concluir`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ receptorId: usuario?.id })
       });
 
-      if (res.ok) {
-        const updated = await res.json();
-        setDoacoesFeitas(prev =>
-          prev.map(d => d.id === id ? updated : d)
-        );
-      }
+      // Atualiza o estado local com a doação atualizada
+      setDoacoesFeitas(prev =>
+        prev.map(d => (d.id === id ? updated : d))
+      );
     } catch (err) {
       console.error("Erro ao finalizar doação:", err);
+      alert(err.message);
     }
   };
 
   if (loading) return <p>Carregando perfil...</p>;
 
+  // O resto do seu código JSX continua exatamente igual
   return (
     <div className="container py-5">
+
+      <div className="text-end mb-3">
+        <button className="btn btn-danger" onClick={handleLogout}>
+          Sair
+        </button>
+      </div>
+
       {/* Cabeçalho do Perfil */}
       {usuario && (
         <div className="text-center mb-5">

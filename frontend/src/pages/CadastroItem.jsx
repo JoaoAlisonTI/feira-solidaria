@@ -1,34 +1,80 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { authenticatedFetch } from '../services/apiFetch'; // Verifique se o caminho está correto
 
-function CadastroItem({ onAdicionar, setMensagem }) {
+function CadastroItem() {
   const [item, setItem] = useState({
-    nome: '',
-    categoria: '',
+    nomeItem: '',
+    categoriaId: '', // Armazenará o ID da categoria selecionada
     cidade: '',
     descricao: ''
   });
-
   const [imagem, setImagem] = useState(null);
+  const [categorias, setCategorias] = useState([]); // Para armazenar as categorias do backend
 
+  // Estados para controle de loading e mensagens de feedback
+  const [loading, setLoading] = useState(false);
+  const [mensagem, setMensagem] = useState({ tipo: '', texto: '' });
+  
+  const navigate = useNavigate();
+
+  // Busca as categorias da API assim que o componente é montado
+  useEffect(() => {
+    const buscarCategorias = async () => {
+      try {
+        const listaCategorias = await authenticatedFetch('/categorias');
+        setCategorias(listaCategorias);
+      } catch (error) {
+        console.error("Erro ao buscar categorias", error);
+        setMensagem({ tipo: 'danger', texto: 'Não foi possível carregar as categorias do servidor.' });
+      }
+    };
+    buscarCategorias();
+  }, []); // O array vazio [] garante que isso rode apenas uma vez
+
+  // Atualiza o estado do formulário a cada mudança nos inputs
   const handleChange = (e) => {
     setItem({ ...item, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  // Lida com o envio do formulário
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setMensagem({ tipo: '', texto: '' });
 
-    const itemComImagem = {
-      ...item,
-      imagem: imagem ? URL.createObjectURL(imagem) : null
-    };
+    // FormData é necessário para enviar formulários com arquivos
+    const formData = new FormData();
+    formData.append('nomeItem', item.nomeItem);
+    formData.append('categoriaId', item.categoriaId);
+    formData.append('cidade', item.cidade);
+    formData.append('descricao', item.descricao);
+    if (imagem) {
+      formData.append('imagem', imagem);
+    }
 
-    onAdicionar(itemComImagem);
-    setItem({ nome: '', categoria: '', cidade: '', descricao: '' });
-    setImagem(null);
+    try {
+      await authenticatedFetch('/doacoes', {
+        method: 'POST',
+        body: formData,
+      });
 
-    setMensagem('Item cadastrado com sucesso!');
-    setTimeout(() => setMensagem(''), 3000);
+      // Se deu certo, exibe mensagem de sucesso e limpa o formulário
+      setMensagem({ tipo: 'success', texto: 'Item cadastrado com sucesso! Redirecionando...' });
+      setItem({ nomeItem: '', categoriaId: '', cidade: '', descricao: '' });
+      setImagem(null);
+      document.querySelector('input[type="file"]').value = '';
+
+      // Redireciona para a página inicial após 2 segundos
+      setTimeout(() => {
+        navigate('/'); 
+      }, 2000);
+
+    } catch (error) {
+      setMensagem({ tipo: 'danger', texto: error.message || 'Erro ao cadastrar item. Tente novamente.' });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -39,30 +85,37 @@ function CadastroItem({ onAdicionar, setMensagem }) {
           Preencha as informações abaixo para doar um item à Feira Solidária
         </p>
 
+        {/* Área para exibir mensagens de sucesso ou erro */}
+        {mensagem.texto && (
+          <div className={`alert alert-${mensagem.tipo}`} role="alert">
+            {mensagem.texto}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit}>
           <input
             className="form-control mb-3"
-            name="nome"
+            name="nomeItem"
             placeholder="Nome do item"
-            value={item.nome}
+            value={item.nomeItem}
             onChange={handleChange}
             required
           />
 
           <select
             className="form-select mb-3"
-            name="categoria"
-            value={item.categoria}
+            name="categoriaId"
+            value={item.categoriaId}
             onChange={handleChange}
             required
           >
             <option value="">Selecione a categoria</option>
-            <option value="Roupas">Roupas</option>
-            <option value="Calçados">Calçados</option>
-            <option value="Alimentos">Alimentos</option>
-            <option value="Brinquedos">Brinquedos</option>
-            <option value="Livros">Livros</option>
-            <option value="Outros">Outros</option>
+            {/* As opções de categoria agora são carregadas dinamicamente */}
+            {categorias.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.nome}
+              </option>
+            ))}
           </select>
 
           <input
@@ -83,7 +136,9 @@ function CadastroItem({ onAdicionar, setMensagem }) {
             rows="3"
           />
 
+          <label htmlFor="imagem" className="form-label">Imagem do item (opcional)</label>
           <input
+            id="imagem"
             type="file"
             accept="image/*"
             className="form-control mb-3"
@@ -92,6 +147,7 @@ function CadastroItem({ onAdicionar, setMensagem }) {
 
           {imagem && (
             <div className="mb-3 text-center">
+              <p>Pré-visualização:</p>
               <img
                 src={URL.createObjectURL(imagem)}
                 alt="Pré-visualização"
@@ -102,8 +158,8 @@ function CadastroItem({ onAdicionar, setMensagem }) {
           )}
 
           <div className="d-grid gap-2">
-            <button className="btn btn-warning" type="submit">
-              Cadastrar Item
+            <button className="btn btn-warning" type="submit" disabled={loading}>
+              {loading ? 'Enviando...' : 'Cadastrar Item'}
             </button>
             <Link to="/" className="btn btn-outline-secondary">
               Voltar ao Início
