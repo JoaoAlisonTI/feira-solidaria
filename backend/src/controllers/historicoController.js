@@ -7,7 +7,7 @@ const USER_ID = 1;
 const getMe = async (req, res) => {
   try {
     const usuario = await prisma.usuario.findUnique({
-      where: { id: USER_ID }
+      where: { id: req.user.id }
     });
     if (!usuario) return res.status(404).json({ error: "Nenhum usuário encontrado" });
     res.json(usuario);
@@ -17,9 +17,13 @@ const getMe = async (req, res) => {
 };
 
 const getDoacoesFeitas = async (req, res) => {
+   // --- INÍCIO DO CÓDIGO DE DEBUG ---
+  console.log('--- ROTA /doacoes-feitas ACIONADA ---');
+  console.log('Conteúdo de req.user:', req.user); 
+  // --- FIM DO CÓDIGO DE DEBUG ---
   try {
     const usuario = await prisma.usuario.findUnique({
-      where: { id: USER_ID },
+      where: { id: req.user.id },
       include: {
         doacoesFeitas: {
           include: {
@@ -32,6 +36,7 @@ const getDoacoesFeitas = async (req, res) => {
     if (!usuario) return res.status(404).json({ error: "Usuário não encontrado" });
     res.json(usuario.doacoesFeitas);
   } catch (err) {
+    console.error('ERRO DETALHADO EM getDoacoesFeitas:', err);
     res.status(500).json({ error: err.message });
   }
 };
@@ -39,7 +44,7 @@ const getDoacoesFeitas = async (req, res) => {
 const getDoacoesRecebidas = async (req, res) => {
   try {
     const usuario = await prisma.usuario.findUnique({
-      where: { id: USER_ID },
+      where: { id: req.user.id },
       include: {
         doacoesRecebidas: {
           include: {

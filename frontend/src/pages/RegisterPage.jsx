@@ -1,6 +1,8 @@
+// src/pages/RegisterPage.jsx
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import api from '../services/api';
+import { authenticatedFetch } from '../services/apiFetch'; // <- IMPORTAÇÃO NOVA
 
 function RegisterPage() {
   const [name, setName] = useState('');
@@ -9,37 +11,33 @@ function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
 
-const handleRegister = async (event) => {
-  event.preventDefault();
+  const handleRegister = async (event) => {
+    event.preventDefault();
+    if (password !== confirmPassword) {
+      alert('As senhas não coincidem!');
+      return;
+    }
 
-  if (password !== confirmPassword) {
-    alert('As senhas não coincidem!');
-    return;
-  }
+    try {
+      await authenticatedFetch('/usuarios', {
+        method: 'POST',
+        body: JSON.stringify({ nome: name, email, senha: password }),
+      });
 
-  try {
-    const response = await api.post('/usuarios', {
-      nome: name,
-      email,
-      senha: password
-    });
-
-    if (response.status === 201) {
       alert('Conta criada com sucesso!');
       navigate('/login');
-    } else {
-      alert(response.data.error || 'Erro ao criar conta.');
+    } catch (error) {
+      alert(error.message || 'Erro ao criar conta.');
     }
-  } catch (error) {
-    alert(error.response?.data?.error || 'Erro de conexão com o servidor.');
-  }
-};
+  };
 
+  // ... o resto do seu código JSX continua igual ...
   return (
     <div className="container d-flex justify-content-center py-5">
       <div className="col-12 col-md-8 col-lg-6 col-xl-5">
         <h2 className="h3 fw-bold text-center my-4 text-custom-dark">Criar uma conta</h2>
         <form onSubmit={handleRegister} className="px-4">
+          {/* Seus inputs de formulário aqui */}
           <div className="mb-3">
             <label className="form-label fw-medium text-custom-dark">Nome</label>
             <input
