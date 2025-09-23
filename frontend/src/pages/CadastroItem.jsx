@@ -43,7 +43,6 @@ function CadastroItem() {
     setLoading(true);
     setMensagem({ tipo: '', texto: '' });
 
-    // FormData é necessário para enviar formulários com arquivos
     const formData = new FormData();
     formData.append('nomeItem', item.nomeItem);
     formData.append('categoriaId', item.categoriaId);
@@ -110,7 +109,6 @@ function CadastroItem() {
             required
           >
             <option value="">Selecione a categoria</option>
-            {/* As opções de categoria agora são carregadas dinamicamente */}
             {categorias.map((cat) => (
               <option key={cat.id} value={cat.id}>
                 {cat.nome}

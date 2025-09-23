@@ -16,11 +16,11 @@ router.get("/:id", doacaoController.getDoacaoById);
 
 // --- Rotas Protegidas ---
 
-// 3. ADICIONAR O 'upload.single('imagem')' NA ROTA DE CRIAÇÃO
-// A ordem é importante: primeiro autentica, depois faz o upload, depois cria no banco.
 router.post("/", authMiddleware, upload.single('imagem'), doacaoController.createDoacao);
 
 router.put("/:id", authMiddleware, doacaoController.updateDoacao);
 router.patch("/:id/concluir", authMiddleware, doacaoController.concluirDoacao);
+router.patch("/:id/reservar", authMiddleware, doacaoController.reservarDoacao);
+router.patch("/:id/relistar", authMiddleware, doacaoController.relistarDoacao);
 
 module.exports = router;

@@ -21,8 +21,6 @@ function Header() {
         <nav className="d-none d-md-flex align-items-center gap-4">
           <Link className="text-custom-dark text-decoration-none" to="/">Início</Link>
           <Link className="text-custom-dark text-decoration-none" to="/cadastroItem">Cadastrar item</Link>
-          <Link className="text-custom-dark text-decoration-none" to="/como-funciona">Como Funciona</Link>
-          <Link className="text-custom-dark text-decoration-none" to="/contato">Contato</Link>
         </nav>
         {isLoggedIn ? (
           <button

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./PaginaPerfil.css";
-// 1. IMPORTAR a nossa função fetch personalizada
 import { authenticatedFetch } from "../../services/apiFetch";
 
 export default function PaginaPerfil() {
@@ -14,68 +13,70 @@ export default function PaginaPerfil() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/");
-  }
+  };
 
-  useEffect(() => {
-    async function carregarDados() {
-      try {
-        // 2. USAR authenticatedFetch para buscar os dados iniciais
-        // A função já adiciona o token, a URL base e converte para .json()
-        const [userRes, feitasRes, recebidasRes] = await Promise.all([
-          authenticatedFetch("/usuarios/me"),
-          authenticatedFetch("/usuarios/me/doacoes-feitas"),
-          authenticatedFetch("/usuarios/me/doacoes-recebidas")
-        ]);
-
-        setUsuario(userRes);
-        setDoacoesFeitas(feitasRes);
-        setDoacoesRecebidas(recebidasRes);
-      } catch (err) {
-        console.error("Erro ao carregar perfil:", err);
-        // Se o token for inválido, o erro 401 será capturado aqui.
-        // Podemos redirecionar para o login.
-        if (err.message.includes("Token")) {
-           navigate("/login");
-        }
-      } finally {
-        setLoading(false);
-      }
-    }
-    carregarDados();
-  }, [navigate]); // Adicionado navigate ao array de dependências
-
-  // Função para finalizar doação
-  const finalizarDoacao = async (id) => {
+  // Esta função agora será usada para recarregar os dados após uma ação
+  const carregarDados = async () => {
     try {
-      // 3. USAR authenticatedFetch para a ação de finalizar
-      const updated = await authenticatedFetch(`/doacoes/${id}/concluir`, {
-        method: "PATCH",
-        body: JSON.stringify({ receptorId: usuario?.id })
-      });
-
-      // Atualiza o estado local com a doação atualizada
-      setDoacoesFeitas(prev =>
-        prev.map(d => (d.id === id ? updated : d))
-      );
+      setLoading(true);
+      const [userRes, feitasRes, recebidasRes] = await Promise.all([
+        authenticatedFetch("/usuarios/me"),
+        authenticatedFetch("/usuarios/me/doacoes-feitas"),
+        authenticatedFetch("/usuarios/me/doacoes-recebidas"),
+      ]);
+      setUsuario(userRes);
+      setDoacoesFeitas(feitasRes);
+      setDoacoesRecebidas(recebidasRes);
     } catch (err) {
-      console.error("Erro ao finalizar doação:", err);
-      alert(err.message);
+      console.error("Erro ao carregar perfil:", err);
+      if (err.message.includes("Token")) {
+        navigate("/login");
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
-  if (loading) return <p>Carregando perfil...</p>;
+  useEffect(() => {
+    carregarDados();
+  }, [navigate]);
 
-  // O resto do seu código JSX continua exatamente igual
+  const handleConcluir = async (id) => {
+    if (!window.confirm("Confirmar a entrega desta doação? Esta ação não pode ser desfeita.")) return;
+    try {
+      await authenticatedFetch(`/doacoes/${id}/concluir`, {
+        method: "PATCH",
+      });
+      // Atualiza a lista para refletir a mudança
+      carregarDados();
+    } catch (err) {
+      alert(`Erro ao finalizar doação: ${err.message}`);
+    }
+  };
+
+  const handleRelistar = async (id) => {
+    if (!window.confirm("Disponibilizar este item para doação novamente? A reserva atual será cancelada.")) return;
+    try {
+      await authenticatedFetch(`/doacoes/${id}/relistar`, {
+        method: "PATCH",
+      });
+      // Atualiza a lista para refletir a mudança
+      carregarDados();
+    } catch (err) {
+      alert(`Erro ao relistar doação: ${err.message}`);
+    }
+  };
+
+  if (loading) return <div className="container mt-4"><p>Carregando perfil...</p></div>;
+
   return (
     <div className="container py-5">
-
       <div className="text-end mb-3">
         <button className="btn btn-danger" onClick={handleLogout}>
           Sair
         </button>
       </div>
 
-      {/* Cabeçalho do Perfil */}
       {usuario && (
         <div className="text-center mb-5">
           <img
@@ -98,27 +99,45 @@ export default function PaginaPerfil() {
         ) : (
           doacoesFeitas.map(item => (
             <div key={item.id} className="col-md-4 col-lg-3 mb-4">
-              <div className="card">
+              <div className="card h-100">
                 <img
                   src={item.imagemUrl || "/sem-imagem.jpg"}
                   alt={item.nomeItem}
                   className="card-img-top"
                 />
-                <div className="card-body">
-                  <h5>{item.nomeItem}</h5>
-                  <p>{item.descricao}</p>
-                  <p>Status: {item.status}</p>
+                <div className="card-body d-flex flex-column">
+                  <h5 className="card-title">{item.nomeItem}</h5>
+                  <p className="card-text">{item.descricao}</p>
+                  
+                  <div className="mt-auto">
+                    {item.status === 'DISPONIVEL' && (
+                      <p><span className="badge bg-success">Disponível</span></p>
+                    )}
 
-                  {item.status !== "ENTREGUE" ? (
-                    <button
-                      className="btn btn-success"
-                      onClick={() => finalizarDoacao(item.id)}
-                    >
-                      Finalizar
-                    </button>
-                  ) : (
-                    <span className="text-muted">✔ Finalizado</span>
-                  )}
+                    {item.status === 'RESERVADA' && (
+                      <div>
+                        <p>
+                          <span className="badge bg-warning text-dark">
+                            Reservado por: {item.receptor?.nome || '...'}
+                          </span>
+                        </p>
+                        <button className="btn btn-primary btn-sm me-2" onClick={() => handleConcluir(item.id)}>
+                          Marcar como Entregue
+                        </button>
+                        <button className="btn btn-secondary btn-sm" onClick={() => handleRelistar(item.id)}>
+                          Disponibilizar Novamente
+                        </button>
+                      </div>
+                    )}
+
+                    {item.status === 'ENTREGUE' && (
+                       <p>
+                          <span className="badge bg-secondary">
+                            Entregue para: {item.receptor?.nome || '...'}
+                          </span>
+                       </p>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -127,7 +146,7 @@ export default function PaginaPerfil() {
       </div>
 
       {/* Doações recebidas */}
-      <h4 className="mb-4">Doações Recebidas</h4>
+      <h4 className="mt-5 mb-4">Doações que Solicitei</h4>
       <div className="row">
         {doacoesRecebidas.length === 0 ? (
           <p>Você ainda não recebeu nenhuma doação.</p>

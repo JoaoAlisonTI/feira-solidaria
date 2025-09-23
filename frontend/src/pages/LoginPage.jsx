@@ -1,8 +1,6 @@
-// src/pages/LoginPage.jsx
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { authenticatedFetch } from '../services/apiFetch'; // <- IMPORTAÇÃO NOVA
+import { authenticatedFetch } from '../services/apiFetch';
 
 function LoginPage() {
   const [email, setEmail] = useState('');
@@ -26,7 +24,6 @@ function LoginPage() {
     }
   };
 
-  // ... o resto do seu código JSX continua igual ...
   return (
     <div className="container d-flex justify-content-center py-5">
       <div className="col-12 col-md-8 col-lg-6 col-xl-5">

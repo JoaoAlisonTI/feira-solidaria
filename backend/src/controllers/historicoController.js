@@ -1,9 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-// Usuário fixo id=1 (simulação de login)
-const USER_ID = 1;
-
 const getMe = async (req, res) => {
   try {
     const usuario = await prisma.usuario.findUnique({
@@ -17,10 +14,6 @@ const getMe = async (req, res) => {
 };
 
 const getDoacoesFeitas = async (req, res) => {
-   // --- INÍCIO DO CÓDIGO DE DEBUG ---
-  console.log('--- ROTA /doacoes-feitas ACIONADA ---');
-  console.log('Conteúdo de req.user:', req.user); 
-  // --- FIM DO CÓDIGO DE DEBUG ---
   try {
     const usuario = await prisma.usuario.findUnique({
       where: { id: req.user.id },
