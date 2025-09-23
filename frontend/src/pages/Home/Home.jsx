@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import heroImage from "../../assets/hero-section-image.svg";
 import Input from "../../components/Input/Input";
 import Produto from "../../components/Produto/Produto";
-import api from "../../services/api";
+import { authenticatedFetch } from "../../services/apiFetch"; 
 
 import "./home.css";
 
@@ -14,8 +14,8 @@ function Home() {
   useEffect(() => {
     async function fetchDoacoes() {
       try {
-        const response = await api.get("/doacoes");
-        setProdutos(response.data);
+        const data = await authenticatedFetch("/doacoes", { method: "GET" });
+        setProdutos(data);
       } catch (err) {
         setError("Erro ao carregar os produtos.");
       } finally {

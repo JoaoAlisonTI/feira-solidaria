@@ -15,7 +15,9 @@ export async function authenticatedFetch(url, options = {}) {
     headers['Content-Type'] = 'application/json';
   }
 
-  const fullUrl = `http://localhost:3001/api${url}`;
+  const BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+  const fullUrl = `${BASE}${url}`; // url deve começar com "/"
+
 
   const response = await fetch(fullUrl, {
     ...options,
