@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import { authenticatedFetch } from "../services/apiFetch";
+
 import "./ItemDetails.css";
 
 export default function ItemDetails() {
@@ -12,10 +13,8 @@ export default function ItemDetails() {
   useEffect(() => {
     async function fetchItem() {
       try {
-        const response = await axios.get(
-          `http://localhost:3001/api/doacoes/${id}`
-        );
-        setItem(response.data);
+        const data = await authenticatedFetch(`/doacoes/${id}`, { method: "GET" });
+        setItem(data);
       } catch (err) {
         setError("Erro ao carregar os detalhes do item.");
       } finally {
